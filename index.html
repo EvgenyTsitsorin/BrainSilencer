@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary SEO -->
+  <title>Noise Inverted Metronome — Online Noise Generator with Silent Beats</title>
+  <meta name="description" content="Noise Inverted Metronome is a free online noise generator with an inverted metronome: white, pink or brown noise that drops into silence on every beat. Set BPM and silence length, mix frequency bands, no sign-up.">
+  <meta name="keywords" content="noise inverted metronome, inverted metronome, silent metronome, metronome with silence, noise generator, white noise generator, pink noise, brown noise, online metronome, rhythm training, timing practice, internal pulse, web audio, audioworklet">
+  <meta name="author" content="Noise Inverted Metronome">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#101319">
+  <link rel="canonical" href="https://evgenytsitsorin.github.io/BrainSilencer/">
+
+  <!-- Icons -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Noise Inverted Metronome">
+  <meta property="og:title" content="Noise Inverted Metronome — Noise Generator with Silent Beats">
+  <meta property="og:description" content="Free online noise generator with an inverted metronome: continuous white, pink or brown noise that mutes on every beat. Adjustable BPM, silence length and frequency mixer.">
+  <meta property="og:url" content="https://evgenytsitsorin.github.io/BrainSilencer/">
+  <meta property="og:image" content="https://evgenytsitsorin.github.io/BrainSilencer/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Noise Inverted Metronome — noise waveform with silent gaps on each beat">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Noise Inverted Metronome — Noise Generator with Silent Beats">
+  <meta name="twitter:description" content="White, pink or brown noise that drops into silence on every beat. Free, in your browser, no sign-up.">
+  <meta name="twitter:image" content="https://evgenytsitsorin.github.io/BrainSilencer/og-image.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Noise Inverted Metronome",
+    "url": "https://evgenytsitsorin.github.io/BrainSilencer/",
+    "description": "A free browser-based noise generator with an inverted metronome: continuous white, pink or brown noise that mutes briefly on every beat.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (modern web browser)",
+    "inLanguage": "en",
+    "browserRequirements": "Requires a browser with Web Audio API and AudioWorklet support",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "keywords": "inverted metronome, noise generator, white noise, pink noise, brown noise, rhythm training"
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Noise Inverted Metronome home">
+        <span class="brand-mark" aria-hidden="true">≈</span>
+        <span>NOISE <span class="brand-light">INVERTED METRONOME</span></span>
+      </a>
+      <div class="status"><span class="status-dot"></span><span id="statusText" role="status" aria-live="polite">READY TO PLAY</span></div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">NOISE GENERATOR · INVERTED METRONOME</p>
+      <h1>Brain <em>Silencer</em></h1>
+      <p class="subheading">A metronome in reverse: continuous noise that drops into silence on every beat. Shape the sound, set the tempo, and feel the pulse in the gaps.</p>
+    </section>
+
+    <noscript>
+      <p class="section-intro">This app generates sound in your browser and needs JavaScript enabled.</p>
+    </noscript>
+
+    <section class="player panel" aria-label="Player">
+      <div class="player-main">
+        <div class="visualizer" id="visualizer" role="img" aria-label="Live sound visualization">
+          <canvas id="waveCanvas"></canvas>
+          <div class="visualizer-label"><span class="live-dot"></span> <span id="visualizerState">IDLE</span></div>
+        </div>
+        <div class="transport">
+          <button id="playButton" class="play-button" aria-label="Play">
+            <svg id="playIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="track-info">
+            <span class="eyebrow">NOW PLAYING</span>
+            <strong id="currentNoise">Ultimate White Noise</strong>
+            <span id="trackDescription">Adjustable multi-band noise</span>
+          </div>
+          <div class="volume-control">
+            <label for="masterVolume"><span>MASTER VOLUME</span><output id="volumeValue">65%</output></label>
+            <input id="masterVolume" type="range" min="0" max="100" value="65">
+            <div class="range-scale"><span>QUIETER</span><span>LOUDER</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sound-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 / SOUND PROFILE</p><h2>Choose the noise character</h2></div>
+        <span class="section-note">4 PROFILES</span>
+      </div>
+      <div class="profile-grid" role="group" aria-label="Noise type">
+        <button class="profile-card" data-type="ultimate">
+          <span class="profile-icon icon-ultimate">◉</span><span class="profile-name">Ultimate</span>
+          <span class="profile-desc">Three bands under your control</span>
+          <span class="profile-tag">ADJUSTABLE</span>
+        </button>
+        <button class="profile-card" data-type="white">
+          <span class="profile-icon icon-white">▦</span><span class="profile-name">White noise</span>
+          <span class="profile-desc">Even, bright broadband noise</span>
+          <span class="profile-tag">FLAT SPECTRUM</span>
+        </button>
+        <button class="profile-card" data-type="pink">
+          <span class="profile-icon icon-pink">〰</span><span class="profile-name">Pink noise</span>
+          <span class="profile-desc">Softer and more balanced</span>
+          <span class="profile-tag">SOFT SOUND</span>
+        </button>
+        <button class="profile-card" data-type="brown">
+          <span class="profile-icon icon-brown">≈</span><span class="profile-name">Brown noise</span>
+          <span class="profile-desc">Deep, low-frequency rumble</span>
+          <span class="profile-tag">DEEP BASS</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="eq-section panel">
+      <div class="section-heading eq-heading">
+        <div><p class="eyebrow">02 / FREQUENCY MIXER</p><h2>Shape your sound</h2></div>
+        <button id="resetButton" class="text-button">↺ Reset</button>
+      </div>
+      <p class="section-intro">Raise or lower the bands to change the tonal balance. The mixer applies to the Ultimate profile, and changes take effect instantly.</p>
+      <div class="mixer">
+        <div class="band">
+          <div class="band-top"><span class="band-dot low-dot"></span><span class="band-name">Low</span></div>
+          <div class="band-range">40–250 Hz</div>
+          <div class="slider-wrap"><input id="lowBand" class="vertical-slider low-range" type="range" min="0" max="100" value="75" orient="vertical" aria-label="Low frequencies"></div>
+          <output id="lowValue">75%</output><span class="band-hint">BODY</span>
+        </div>
+        <div class="band">
+          <div class="band-top"><span class="band-dot mid-dot"></span><span class="band-name">Mid</span></div>
+          <div class="band-range">250–3000 Hz</div>
+          <div class="slider-wrap"><input id="midBand" class="vertical-slider mid-range" type="range" min="0" max="100" value="55" orient="vertical" aria-label="Mid frequencies"></div>
+          <output id="midValue">55%</output><span class="band-hint">TEXTURE</span>
+        </div>
+        <div class="band">
+          <div class="band-top"><span class="band-dot high-dot"></span><span class="band-name">High</span></div>
+          <div class="band-range">3000–12000 Hz</div>
+          <div class="slider-wrap"><input id="highBand" class="vertical-slider high-range" type="range" min="0" max="100" value="30" orient="vertical" aria-label="High frequencies"></div>
+          <output id="highValue">30%</output><span class="band-hint">AIR</span>
+        </div>
+      </div>
+      <div class="eq-footer"><span><span class="tiny-dot"></span> LIVE MIX</span><span>ADJUSTABLE WHILE PLAYING</span></div>
+    </section>
+
+    <section class="metronome-section panel" id="metronomePanel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">03 / INVERTED METRONOME</p>
+          <h2>Inverted metronome</h2>
+        </div>
+        <label class="switch" for="metronomeEnabled" aria-label="Enable inverted metronome">
+          <input id="metronomeEnabled" type="checkbox">
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+        </label>
+      </div>
+      <p class="section-intro">The noise cuts out briefly on every beat. Between the gaps, it plays continuously.</p>
+      <div class="metronome-controls">
+        <div class="metro-control">
+          <label for="bpmInput"><span class="control-title">Tempo</span><span class="control-unit">BPM</span></label>
+          <div class="number-control">
+            <button type="button" class="step-button" id="bpmDown" aria-label="Decrease BPM">−</button>
+            <input id="bpmInput" type="number" min="30" max="240" step="1" value="60" inputmode="numeric">
+            <button type="button" class="step-button" id="bpmUp" aria-label="Increase BPM">+</button>
+          </div>
+          <input id="bpmRange" type="range" min="30" max="240" step="1" value="60" aria-label="Tempo in beats per minute">
+          <div class="control-hint"><span>30 slow</span><span>240 fast</span></div>
+        </div>
+        <div class="metro-control">
+          <label for="silenceInput"><span class="control-title">Silence length</span><span class="control-unit">ms</span></label>
+          <div class="number-control">
+            <button type="button" class="step-button" id="silenceDown" aria-label="Decrease silence length">−</button>
+            <input id="silenceInput" type="number" min="0" max="1000" step="10" value="120" inputmode="numeric">
+            <button type="button" class="step-button" id="silenceUp" aria-label="Increase silence length">+</button>
+          </div>
+          <input id="silenceRange" type="range" min="0" max="1000" step="10" value="120" aria-label="Silence length in milliseconds">
+          <div class="control-hint"><span>0 ms</span><span>1000 ms</span></div>
+        </div>
+      </div>
+      <div class="metronome-readout">
+        <span class="metro-pulse" id="metroPulse"></span>
+        <span id="metronomeSummary">Off — noise plays continuously</span>
+        <span class="metro-mode">MUTE ON BEAT</span>
+      </div>
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">What is an inverted metronome?</h2>
+      <p>A regular metronome marks each beat with a click. An <strong>inverted metronome</strong> does the opposite: it plays a steady sound and marks each beat with a short moment of <strong>silence</strong>. In Noise Inverted Metronome, that steady sound is white, pink or brown noise, so the beat shows up as a brief gap in the noise instead of an extra sound on top of it.</p>
+      <p>It can be useful for rhythm and timing practice, for developing an internal pulse, or simply as a background sound with a gentle rhythmic structure. Set the tempo from 30 to 240 BPM and the silence from 0 to 1000 ms, then shape the noise with the three-band frequency mixer.</p>
+
+      <h3>Frequently asked questions</h3>
+      <details>
+        <summary>What is the difference between white, pink and brown noise?</summary>
+        <p>White noise has equal energy across all frequencies, so it sounds bright. Pink noise has less energy in the highs and sounds softer and more balanced. Brown noise is weighted toward the lows and sounds like a deep rumble.</p>
+      </details>
+      <details>
+        <summary>Is anything recorded or uploaded?</summary>
+        <p>The sound is generated locally in your browser with the Web Audio API and an AudioWorklet. Nothing is recorded or sent anywhere, and there is no sign-up or account.</p>
+      </details>
+      <details>
+        <summary>Why is there no sound on my device?</summary>
+        <p>Browsers only start audio after you interact with the page, so press the play button first. Also check your system volume and make sure your browser supports AudioWorklet (all current versions of Chrome, Edge, Firefox and Safari do).</p>
+      </details>
+    </section>
+
+    <footer>
+      <span>NOISE INVERTED METRONOME <span class="footer-muted">/ REAL-TIME AUDIO</span></span>
+      <span>Sound is generated locally in your browser</span>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

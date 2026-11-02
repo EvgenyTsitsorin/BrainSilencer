@@ -1,4 +1,5 @@
-# Noise Inverted Metronome / Brain Silencer
+# Noise Inverted Metronome
+
 A free, browser-based **noise generator with an inverted metronome**: continuous white, pink or brown noise that drops into silence on every beat. Set the tempo, choose how long the silence lasts, and shape the sound with a three-band frequency mixer.
 
 **Live demo:** https://evgenytsitsorin.github.io/BrainSilencer/  
