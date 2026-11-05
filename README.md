@@ -2,6 +2,7 @@
 Noise generator with an inverted metronome
 
 **Live demo:** https://evgenytsitsorin.github.io/BrainSilencer/  
+**Repository:** https://github.com/EvgenyTsitsorin/BrainSilencer/
 
 ## What is an BrainSilencer?
 
