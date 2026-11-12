@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary SEO -->
+  <title>Brain Silencer – Quiet Your Mind with Rhythmic Noise</title>
+  <meta name="description" content="Can’t switch off your thoughts? Try BrainSilencer, an experimental sound tool combining white, pink and brown noise with rhythmic silence to give your attention something else to follow.">
+  <meta name="keywords" content="BrainSilencer, how to stop overthinking, how to quiet your mind, racing thoughts, busy mind, constant inner monologue, mental chatter, noisy mind, mental noise, calming sounds, relaxing noise, white noise, pink noise, brown noise, noise inverted metronome, rhythmic silence, auditory attention">
+  <meta name="author" content="Evgeny Tsitsorin">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#101319">
+  <link rel="canonical" href="https://evgenytsitsorin.github.io/BrainSilencer/">
+
+  <!-- Icons -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BrainSilencer">
+  <meta property="og:title" content="Brain Silencer – Quiet Your Mind with Rhythmic Noise">
+  <meta property="og:description" content="Can’t switch off your thoughts? Explore an experimental sound tool combining continuous noise with rhythmic moments of silence to give your attention something else to follow.">
+  <meta property="og:url" content="https://evgenytsitsorin.github.io/BrainSilencer/">
+  <meta property="og:image" content="https://evgenytsitsorin.github.io/BrainSilencer/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="BrainSilencer — sound waveform with rhythmic moments of silence">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Brain Silencer – Quiet Your Mind with Rhythmic Noise">
+  <meta name="twitter:description" content="A different way to direct your attention: continuous white, pink or brown noise interrupted by rhythmic moments of silence. Free in your browser.">
+  <meta name="twitter:image" content="https://evgenytsitsorin.github.io/BrainSilencer/og-image.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BrainSilencer",
+    "url": "https://evgenytsitsorin.github.io/BrainSilencer/",
+    "description": "An experimental browser-based sound tool combining continuous noise with rhythmic moments of silence to give auditory attention something external to follow.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (modern web browser)",
+    "inLanguage": "en",
+    "browserRequirements": "Requires a browser with Web Audio API and AudioWorklet support",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "keywords": "BrainSilencer, overthinking, racing thoughts, busy mind, inner monologue, mental chatter, auditory attention, white noise, pink noise, brown noise, rhythmic silence, inverted metronome"
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="BrainSilencer home">
+        <span class="brand-mark" aria-hidden="true">≈</span>
+        <span>BRAIN<span class="brand-light">SILENCER</span></span>
+      </a>
+      <div class="status"><span class="status-dot"></span><span id="statusText" role="status" aria-live="polite">READY TO PLAY</span></div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">AN EXPERIMENTAL SOUND TOOL FOR A BUSY MIND</p>
+      <h1>Can’t turn off your <em>mind</em>?</h1>
+      <h3>Give your thoughts a break.</h3>
+      <p class="subheading">BrainSilencer combines continuous background noise with brief, rhythmic moments of silence. It offers your attention something external to follow when your thoughts keep running. Choose a sound, adjust the rhythm, and find a pattern that feels comfortable.</p>
+    </section>
+
+    <noscript>
+      <p class="section-intro">This app generates sound in your browser and needs JavaScript enabled.</p>
+    </noscript>
+
+    <section class="player panel" aria-label="Player">
+      <div class="player-main">
+        <div class="visualizer" id="visualizer" role="img" aria-label="Live sound visualization">
+          <canvas id="waveCanvas"></canvas>
+          <div class="visualizer-label"><span class="live-dot"></span> <span id="visualizerState">IDLE</span></div>
+          <div class="session-badge" id="sessionBadge" hidden aria-live="off"><span aria-hidden="true">⏱</span> <span id="sessionBadgeText">05:00</span></div>
+        </div>
+        <div class="transport">
+          <button id="playButton" class="play-button" aria-label="Play">
+            <svg id="playIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="track-info">
+            <span class="eyebrow">NOW PLAYING</span>
+            <strong id="currentNoise">Ultimate White Noise</strong>
+            <span id="trackDescription">Adjustable multi-band noise</span>
+          </div>
+          <div class="volume-control">
+            <label for="masterVolume"><span>MASTER VOLUME</span><output id="volumeValue">65%</output></label>
+            <input id="masterVolume" type="range" min="0" max="100" value="65">
+            <div class="range-scale"><span>QUIETER</span><span>LOUDER</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sound-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 / SOUND PROFILE</p><h2>Choose the noise character</h2></div>
+        <span class="section-note">4 PROFILES</span>
+      </div>
+      <div class="profile-grid" role="group" aria-label="Noise type">
+        <button class="profile-card" data-type="ultimate">
+          <span class="profile-icon icon-ultimate">◉</span><span class="profile-name">Ultimate</span>
+          <span class="profile-desc">Three bands under your control</span>
+          <span class="profile-tag">ADJUSTABLE</span>
+        </button>
+        <button class="profile-card" data-type="white">
+          <span class="profile-icon icon-white">▦</span><span class="profile-name">White noise</span>
+          <span class="profile-desc">Even, bright broadband noise</span>
+          <span class="profile-tag">FLAT SPECTRUM</span>
+        </button>
+        <button class="profile-card" data-type="pink">
+          <span class="profile-icon icon-pink">〰</span><span class="profile-name">Pink noise</span>
+          <span class="profile-desc">Softer and more balanced</span>
+          <span class="profile-tag">SOFT SOUND</span>
+        </button>
+        <button class="profile-card" data-type="brown">
+          <span class="profile-icon icon-brown">≈</span><span class="profile-name">Brown noise</span>
+          <span class="profile-desc">Deep, low-frequency rumble</span>
+          <span class="profile-tag">DEEP BASS</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="eq-section panel">
+      <div class="section-heading eq-heading">
+        <div><p class="eyebrow">02 / FREQUENCY MIXER</p><h2>Shape your sound</h2></div>
+        <button id="resetButton" class="text-button">↺ Reset</button>
+      </div>
+      <p class="section-intro">Raise or lower the bands to change the tonal balance. The mixer applies to the Ultimate profile, and changes take effect instantly.</p>
+      <div class="mixer">
+        <div class="band">
+          <div class="band-top"><span class="band-dot low-dot"></span><span class="band-name">Low</span></div>
+          <div class="band-range">40–250 Hz</div>
+          <div class="slider-wrap"><input id="lowBand" class="vertical-slider low-range" type="range" min="0" max="100" value="75" orient="vertical" aria-label="Low frequencies"></div>
+          <output id="lowValue">75%</output><span class="band-hint">BODY</span>
+        </div>
+        <div class="band">
+          <div class="band-top"><span class="band-dot mid-dot"></span><span class="band-name">Mid</span></div>
+          <div class="band-range">250–3000 Hz</div>
+          <div class="slider-wrap"><input id="midBand" class="vertical-slider mid-range" type="range" min="0" max="100" value="55" orient="vertical" aria-label="Mid frequencies"></div>
+          <output id="midValue">55%</output><span class="band-hint">TEXTURE</span>
+        </div>
+        <div class="band">
+          <div class="band-top"><span class="band-dot high-dot"></span><span class="band-name">High</span></div>
+          <div class="band-range">3000–12000 Hz</div>
+          <div class="slider-wrap"><input id="highBand" class="vertical-slider high-range" type="range" min="0" max="100" value="30" orient="vertical" aria-label="High frequencies"></div>
+          <output id="highValue">30%</output><span class="band-hint">AIR</span>
+        </div>
+      </div>
+      <div class="eq-footer"><span><span class="tiny-dot"></span> LIVE MIX</span><span>ADJUSTABLE WHILE PLAYING</span></div>
+    </section>
+
+    <section class="metronome-section panel" id="metronomePanel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">03 / INVERTED METRONOME</p>
+          <h2>Inverted metronome</h2>
+        </div>
+        <label class="switch" for="metronomeEnabled" aria-label="Enable inverted metronome">
+          <input id="metronomeEnabled" type="checkbox">
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+        </label>
+      </div>
+      <p class="section-intro">The noise cuts out briefly on every beat. Between the gaps, it plays continuously.</p>
+      <div class="metronome-controls">
+        <div class="metro-control">
+          <label for="bpmInput"><span class="control-title">Tempo</span><span class="control-unit">BPM</span></label>
+          <div class="number-control">
+            <button type="button" class="step-button" id="bpmDown" aria-label="Decrease BPM">−</button>
+            <input id="bpmInput" type="number" min="30" max="240" step="1" value="30" inputmode="numeric">
+            <button type="button" class="step-button" id="bpmUp" aria-label="Increase BPM">+</button>
+          </div>
+          <input id="bpmRange" type="range" min="30" max="240" step="1" value="30" aria-label="Tempo in beats per minute">
+          <div class="control-hint"><span>30 slow</span><span>240 fast</span></div>
+          <div class="control-lock" id="tempoLock" hidden>⏱ Controlled by tempo glide (see Session timer)</div>
+        </div>
+        <div class="metro-control">
+          <label for="silenceInput"><span class="control-title">Silence length</span><span class="control-unit">ms</span></label>
+          <div class="number-control">
+            <button type="button" class="step-button" id="silenceDown" aria-label="Decrease silence length">−</button>
+            <input id="silenceInput" type="number" min="0" max="1000" step="10" value="120" inputmode="numeric">
+            <button type="button" class="step-button" id="silenceUp" aria-label="Increase silence length">+</button>
+          </div>
+          <input id="silenceRange" type="range" min="0" max="1000" step="10" value="120" aria-label="Silence length in milliseconds">
+          <div class="control-hint"><span>0 ms</span><span id="silenceMaxHint">1000 ms</span></div>
+        </div>
+      </div>
+      <div class="metronome-readout">
+        <span class="metro-pulse" id="metroPulse"></span>
+        <span id="metronomeSummary">Off — noise plays continuously</span>
+        <span class="metro-mode">MUTE ON BEAT</span>
+      </div>
+    </section>
+
+    <section class="timer-section panel" id="timerPanel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">04 / SESSION TIMER</p>
+          <h2>Session timer</h2>
+        </div>
+        <label class="switch" for="timerEnabled" aria-label="Enable session timer">
+          <input id="timerEnabled" type="checkbox">
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+        </label>
+      </div>
+      <p class="section-intro">Run a countdown from 1 to 15 minutes. When time is up, the sound fades out, or keeps playing if you prefer. Optionally, the tempo can glide smoothly from one BPM to another over the whole session.</p>
+
+      <div class="timer-readout">
+        <div class="timer-clock">
+          <span class="timer-label">REMAINING</span>
+          <strong id="timerClock">05:00</strong>
+        </div>
+        <div class="timer-progress">
+          <div class="timer-bar" id="timerBar" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="timerFill"></span></div>
+          <div class="timer-meta"><span id="timerElapsed">00:00 elapsed of 05:00</span><span id="timerBpmLive"></span></div>
+        </div>
+        <button id="timerRestart" class="text-button" type="button">↺ Restart</button>
+      </div>
+
+      <div class="metronome-controls">
+        <div class="metro-control">
+          <label for="timerMinutes"><span class="control-title">Duration</span><span class="control-unit">MIN</span></label>
+          <div class="number-control">
+            <button type="button" class="step-button" id="timerDown" aria-label="Decrease duration">−</button>
+            <input id="timerMinutes" type="number" min="1" max="15" step="1" value="5" inputmode="numeric">
+            <button type="button" class="step-button" id="timerUp" aria-label="Increase duration">+</button>
+          </div>
+          <input id="timerMinutesRange" type="range" min="1" max="15" step="1" value="5" aria-label="Timer duration in minutes">
+          <div class="control-hint"><span>1 min</span><span>15 min</span></div>
+          <div class="chips" id="timerChips" role="group" aria-label="Duration presets">
+            <button type="button" class="chip" data-minutes="1">1</button>
+            <button type="button" class="chip" data-minutes="5">5</button>
+            <button type="button" class="chip" data-minutes="10">10</button>
+            <button type="button" class="chip" data-minutes="15">15</button>
+          </div>
+        </div>
+        <div class="metro-control">
+          <div class="control-head"><span class="control-title">When time is up</span></div>
+          <div class="segmented" id="endGroup" role="group" aria-label="When time is up">
+            <button type="button" data-value="fade" class="active" aria-pressed="true">Fade out &amp; stop</button>
+            <button type="button" data-value="keep" aria-pressed="false">Keep playing</button>
+          </div>
+          <div id="fadeControl" class="fade-control">
+            <label for="fadeInput" class="fade-label"><span class="control-title">Fade-out length</span><span class="control-unit">SEC</span></label>
+            <div class="number-control">
+              <button type="button" class="step-button" id="fadeDown" aria-label="Decrease fade-out length">−</button>
+              <input id="fadeInput" type="number" min="1" max="30" step="1" value="10" inputmode="numeric">
+              <button type="button" class="step-button" id="fadeUp" aria-label="Increase fade-out length">+</button>
+            </div>
+            <input id="fadeRange" type="range" min="1" max="30" step="1" value="10" aria-label="Fade-out length in seconds">
+            <div class="control-hint"><span>1 s</span><span>30 s</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glide-block" id="glideBlock">
+        <div class="glide-head">
+          <div>
+            <span class="control-title">Tempo glide</span>
+            <p class="glide-sub">Slide the BPM smoothly from a start to an end value across the whole timer. Works with the inverted metronome, and switches both on for you.</p>
+          </div>
+          <label class="switch" for="glideEnabled" aria-label="Enable tempo glide">
+            <input id="glideEnabled" type="checkbox">
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+        <div class="glide-body">
+          <div class="glide-controls">
+            <div class="metro-control">
+              <label for="glideStart"><span class="control-title">Start tempo</span><span class="control-unit">BPM</span></label>
+              <div class="number-control">
+                <button type="button" class="step-button" id="glideStartDown" aria-label="Decrease start tempo">−</button>
+                <input id="glideStart" type="number" min="30" max="240" step="1" value="60" inputmode="numeric">
+                <button type="button" class="step-button" id="glideStartUp" aria-label="Increase start tempo">+</button>
+              </div>
+              <input id="glideStartRange" type="range" min="30" max="240" step="1" value="60" aria-label="Start tempo in beats per minute">
+              <div class="control-hint"><span>30 slow</span><span>240 fast</span></div>
+            </div>
+            <button type="button" class="swap-button" id="glideSwap" aria-label="Swap start and end tempo" title="Swap start and end">⇄</button>
+            <div class="metro-control">
+              <label for="glideEnd"><span class="control-title">End tempo</span><span class="control-unit">BPM</span></label>
+              <div class="number-control">
+                <button type="button" class="step-button" id="glideEndDown" aria-label="Decrease end tempo">−</button>
+                <input id="glideEnd" type="number" min="30" max="240" step="1" value="30" inputmode="numeric">
+                <button type="button" class="step-button" id="glideEndUp" aria-label="Increase end tempo">+</button>
+              </div>
+              <input id="glideEndRange" type="range" min="30" max="240" step="1" value="30" aria-label="End tempo in beats per minute">
+              <div class="control-hint"><span>30 slow</span><span>240 fast</span></div>
+            </div>
+          </div>
+
+          <div class="metro-control curve-picker">
+            <div class="control-head"><span class="control-title">Curve</span></div>
+            <div class="segmented" id="curveGroup" role="group" aria-label="Tempo curve">
+              <button type="button" data-value="linear" class="active" aria-pressed="true">Linear</button>
+              <button type="button" data-value="smooth" aria-pressed="false">Ease in-out</button>
+              <button type="button" data-value="exponential" aria-pressed="false">Exponential</button>
+            </div>
+            <p class="curve-desc" id="curveDesc"></p>
+          </div>
+
+          <div class="curve-card">
+            <svg id="curveSvg" viewBox="0 0 600 120" preserveAspectRatio="none" role="img" aria-label="Preview of the tempo over time"></svg>
+            <div class="curve-labels"><span id="curveStartLabel"></span><span id="curveEndLabel"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metronome-readout">
+        <span class="metro-pulse" id="timerPulse"></span>
+        <span id="timerSummary">Off — plays until you pause</span>
+        <span class="metro-mode">COUNTDOWN</span>
+      </div>
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">A different way to direct your attention</h2>
+      <p>Does your mind keep talking when you want to relax, focus, or fall asleep? BrainSilencer offers a different kind of listening experience for moments when you feel caught in a constant stream of thoughts.</p>
+      <p><strong>BrainSilencer</strong> is an <strong>experimental auditory attention tool</strong> for people who experience mental chatter, racing thoughts, or difficulty switching off their inner monologue.</p>
+      <h3>How does it work?</h3>
+      <p>Instead of marking each beat with a click, an inverted metronome briefly interrupts continuous background noise. These short gaps create a subtle rhythm for your attention to notice and follow.</p>
+      <p>Choose White, Pink, or Brown Noise, or shape your own sound with the frequency mixer. Adjust the tempo and silence duration to find a pattern that feels comfortable to you.</p>
+      <p>No complicated exercises and no pressure to clear your mind. Just sound, silence, and another place to rest your attention.</p>
+      <p><strong>You don’t have to silence your mind. Give it something else to listen to.</strong></p>
+      <p><strong>BrainSilencer</strong> is an <strong>experimental</strong> auditory attention tool, not a medical treatment or a guaranteed way to stop unwanted thoughts.</p>
+
+      <h3>Frequently asked questions</h3>
+      <details>
+        <summary>Can BrainSilencer help with overthinking?</summary>
+        <p>BrainSilencer is designed as an experimental auditory attention tool. Its rhythmic pauses may give you something external to notice and follow, but individual experiences vary. It is not a treatment for overthinking or any mental health condition.</p>
+      </details>
+      <details>
+        <summary>Does BrainSilencer stop unwanted thoughts?</summary>
+        <p>No. BrainSilencer does not switch off thoughts or control mental activity. It offers a sound pattern that you can choose to focus on when you want to shift your attention.</p>
+      </details>
+      <details>
+        <summary>Can I use it before sleep or while working?</summary>
+        <p>You can experiment with BrainSilencer during quiet activities, work breaks, or as part of your bedtime routine. Choose a comfortable volume and stop using it if the sound feels distracting or uncomfortable.</p>
+      </details>
+      <details>
+        <summary>Which noise is best for a busy mind?</summary>
+        <p>There is no single best option for everyone. Try White, Pink, and Brown Noise at a comfortable volume, then adjust the tempo and silence length to find what you prefer.</p>
+      </details>
+      <details>
+        <summary>What is the difference between white, pink and brown noise?</summary>
+        <p>White noise has equal energy across all frequencies, so it sounds bright. Pink noise has less energy in the highs and sounds softer and more balanced. Brown noise is weighted toward the lows and sounds like a deep rumble.</p>
+      </details>
+      <details>
+        <summary>What are the session timer and tempo glide?</summary>
+        <p>The session timer counts down from 1 to 15 minutes and can fade the sound out when it ends. Tempo glide changes the metronome smoothly during the session, for example from 60 down to 30 BPM to wind down, or from 30 up to 60 BPM to wind up. You choose the start, the end and the shape of the curve.</p>
+      </details>
+      <details>
+        <summary>Is anything recorded or uploaded?</summary>
+        <p>The sound is generated locally in your browser with the Web Audio API and an AudioWorklet. Nothing is recorded or sent anywhere, and there is no sign-up or account.</p>
+      </details>
+      <details>
+        <summary>Why is there no sound on my device?</summary>
+        <p>Browsers only start audio after you interact with the page, so press the play button first. Also check your system volume and make sure your browser supports AudioWorklet (all current versions of Chrome, Edge, Firefox and Safari do).</p>
+      </details>
+    </section>
+
+    <footer>
+      <span>BRAINSILENCER <span class="footer-muted">/ RHYTHMIC NOISE</span></span>
+      <span>Sound is generated locally in your browser</span>
+      <span class="wrapper"><a class="footer-muted" href="https://www.linkedin.com/in/evgeny-tsitsorin-9547771b6/">in Evgeny Tsitsorin</a></span>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
