@@ -24,6 +24,11 @@ You don't have to silence your mind. Give it something else to listen to.
 - Adjustable rhythm from 30 to 240 BPM.
 - Silence intervals from 0 to 1000 ms.
 - Real-time sound customization.
+- Session timer from 1 to 15 minutes with a live countdown, progress bar and a countdown in the browser tab title.
+- Smooth tempo glide over the timer, e.g. 60 → 30 BPM (wind down) or 30 → 60 BPM (wind up), with linear, ease in-out or exponential curves and a live preview.
+- Choose what happens at the end: fade out and stop (1–30 s) or keep playing.
+- Settings (sound, mixer, metronome, timer) are remembered in the browser via localStorage.
+- The timer and tempo glide run on the audio clock, so they stay accurate when the tab is in the background.
 
 
 ## Browser support
