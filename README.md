@@ -41,4 +41,4 @@ MIT
 
 ## Analytics
 
-Optional, privacy-friendly visit statistics via [GoatCounter](https://www.goatcounter.com) (no cookies, no personal data, Do Not Track respected). To enable: register a site, then set `GOATCOUNTER_CODE` in `analytics.js`. Leave it empty to disable analytics completely.
+Optional, privacy-friendly visit statistics via [GoatCounter](https://www.goatcounter.com) (no cookies, no personal data, Do Not Track respected).
