@@ -4,7 +4,7 @@
 // While GOATCOUNTER_CODE is empty, nothing is loaded and nothing is sent.
 (() => {
   "use strict";
-  const GOATCOUNTER_CODE = 'brainsilencer.goatcounter.com';
+  const GOATCOUNTER_CODE = 'brainsilencer';
 
   window.bsTrack = () => {};
   if (!GOATCOUNTER_CODE) return;
